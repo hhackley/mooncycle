@@ -12,11 +12,12 @@ def get_coordinates(address):
     else:
         return None
 
-def get_moon_phase(latitude, longitude):
+def get_moon_phase(latitude, longitude, date):
     observer = ephem.Observer()
     observer.lat = str(latitude)
     observer.lon = str(longitude)
-
+    observer.date = date
+    
     moon = ephem.Moon()
     moon.compute(observer)
 
@@ -48,10 +49,15 @@ if coordinates:
     print("Latitude:", latitude)
     print("Longitude:", longitude)
 
-    # Get the moon phase for the provided coordinates
-    moon_phase = get_moon_phase(latitude, longitude)
+# Prompt the user to enter a date
+    print("\n---- Getting Date ----")
+    date_input = input("Enter a date (in the format MM DD YYYY): ")
+    date_parts = date_input.split()
+    date = "-".join([date_parts[2], date_parts[0], date_parts[1]])  # Rearrange date parts to YYYY-MM-DD
+
     print("\n---- Moon Phase ----")
-    print("Moon Phase:", moon_phase)
-    print("\n")
+# Get the moon phase for the provided coordinates and date
+    moon_phase = get_moon_phase(latitude, longitude, date)
+    print("Moon Phase on", date + ":", moon_phase)
 else:
     print("Unable to retrieve coordinates for the address.")
